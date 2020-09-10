@@ -9,5 +9,10 @@ import com.pad.ppmtool.domain.Project;
 public interface ProjectRepository extends CrudRepository<Project, Long>{
 	
 	Project findByProjectIdentifier(String projectIdentifier);
+	
+	
+	Iterable<Project> findAll();
+
+	
  
 }
