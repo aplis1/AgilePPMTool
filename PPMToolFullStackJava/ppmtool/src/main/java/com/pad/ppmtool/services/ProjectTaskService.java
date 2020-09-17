@@ -1,11 +1,15 @@
 package com.pad.ppmtool.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.pad.ppmtool.domain.BackLog;
+import com.pad.ppmtool.domain.Project;
 import com.pad.ppmtool.domain.ProjectTask;
+import com.pad.ppmtool.exceptions.ProjectNotFoundException;
 import com.pad.ppmtool.repositories.BackLogRepository;
+import com.pad.ppmtool.repositories.ProjectRepository;
 import com.pad.ppmtool.repositories.ProjectTaskRepository;
 
 @Service
@@ -15,8 +19,12 @@ public class ProjectTaskService {
 	private BackLogRepository backLogRepository;
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
+	@Autowired
+	private ProjectRepository projectRepository;
 	
 	public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
+		try {
+			
 		//Exceptions: Project not found
 		//ProjectTasks to be added to a specific project, project !=null and backlog exists
 		BackLog backLog = backLogRepository.findByProjectIdentifier(projectIdentifier);
@@ -40,7 +48,22 @@ public class ProjectTaskService {
 		}
 		
 		return projectTaskRepository.save(projectTask);
+		}
+		catch(Exception e) {
+			throw new ProjectNotFoundException("Project Not Found");
+		}
 		 
+	}
+
+	public Iterable<ProjectTask> findBacklogById(String backlog_id) {
+		
+		Project project = projectRepository.findByProjectIdentifier(backlog_id);
+		
+		if(project == null) {
+			throw new ProjectNotFoundException("Project with ID: '"+backlog_id+"' doens't exist");
+		}
+		
+		return projectTaskRepository.findByProjectIdentifierOrderByPriority(backlog_id);
 	}
 	
 	
