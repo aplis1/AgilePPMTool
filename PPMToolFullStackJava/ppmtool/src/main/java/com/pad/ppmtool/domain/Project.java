@@ -2,11 +2,14 @@ package com.pad.ppmtool.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.validation.constraints.NotBlank;
@@ -37,7 +40,12 @@ public class Project {
 	private Date created_At;
 	@JsonFormat(pattern = "YYYY-MM-dd")
 	private Date updated_At;
-	
+	/* one Project has one Backlog 
+	 * eager means BackLog is fetched before hand for Project
+	 * cascade all means If Project is deleted all it's child will be deleted as well
+	*/
+	@OneToOne(fetch= FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="project")
+	private BackLog backLog;
 	
 	
 	public Project() {
@@ -45,6 +53,18 @@ public class Project {
 	}
 	
 	
+
+	public BackLog getBackLog() {
+		return backLog;
+	}
+
+
+
+	public void setBackLog(BackLog backLog) {
+		this.backLog = backLog;
+	}
+
+
 
 	public Long getId() {
 		return id;
