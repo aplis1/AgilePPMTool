@@ -2,14 +2,20 @@ package com.pad.ppmtool.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class ProjectTask {
@@ -24,11 +30,17 @@ public class ProjectTask {
 	private String status;
 	private Integer priority;//group project tasks
 	private Date dueDate;
-	//ManyToOne with BackLog
-	private String projectIdentifier;
+	
 	@Column(updatable = false)
+	private String projectIdentifier;
+	
 	private Date created_At;
 	private Date updated_At;
+	//ManyToOne with Backlog
+	@ManyToOne(fetch= FetchType.EAGER, cascade= CascadeType.REFRESH)
+	@JoinColumn(name="backlog_id", updatable = false, nullable= false )
+	@JsonIgnore //infinite recursion
+	private BackLog backLog;
 	
 	
 	public ProjectTask() {
@@ -106,6 +118,15 @@ public class ProjectTask {
 
 	public void setProjectIdentifier(String projectIdentifier) {
 		this.projectIdentifier = projectIdentifier;
+	}
+	
+
+	public BackLog getBackLog() {
+		return backLog;
+	}
+
+	public void setBackLog(BackLog backLog) {
+		this.backLog = backLog;
 	}
 
 	@Override
