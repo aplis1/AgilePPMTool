@@ -96,5 +96,11 @@ public class ProjectTaskService {
 		return updateTask;
 	}
 	
+	public void deleteProjectTaskByProjectSequence(String backlog_id, String projecttask_id) {
+		ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, projecttask_id);
+		
+		projectTaskRepository.delete(projectTask);
+	}
+	
 
 }

@@ -31,7 +31,7 @@ public class BackLog {
 	
 
 	//OneToMany with projectTasks(a backLog can have one or more ProjectTask but a ProjectTask can belong to one Project)
-	@OneToMany(fetch=FetchType.EAGER, cascade= CascadeType.ALL, mappedBy="backLog")
+	@OneToMany(fetch=FetchType.EAGER, cascade= CascadeType.REFRESH, mappedBy="backLog")
 	private List<ProjectTask> projectTasks = new ArrayList<>();
 
 
