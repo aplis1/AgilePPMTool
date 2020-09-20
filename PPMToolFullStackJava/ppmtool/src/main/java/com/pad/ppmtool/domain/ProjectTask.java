@@ -22,7 +22,7 @@ public class ProjectTask {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(updatable = false)
+	@Column(updatable = false, unique = true)
 	private String projectSequence; //to search individual project tasks
 	@NotBlank(message = "Please include a project summary")
 	private String summary;//header of the project task

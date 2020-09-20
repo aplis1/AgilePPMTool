@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +44,19 @@ public class BackLogController {
 	@GetMapping("/{backlog_id}")
 	public Iterable<ProjectTask> getProjectBacklog(@PathVariable String backlog_id){
 		return projectTaskService.findBacklogById(backlog_id);
+	}
+	
+	@GetMapping("/{backlog_id}/{projecttask_id}")
+	public ResponseEntity<?> getProjectTaskBySequence(@PathVariable String backlog_id, @PathVariable String projecttask_id ){
+		ProjectTask projectTask = projectTaskService.findProjectTaskByProjectSequence(backlog_id, projecttask_id);
+		return new ResponseEntity<ProjectTask>(projectTask, HttpStatus.OK);	
+	}
+	
+	@PatchMapping("/{backlog_id}/{projecttask_id}")
+	public ResponseEntity<?> updateProjectBySequence(@Valid @RequestBody ProjectTask updateTask, 
+			@PathVariable String backlog_id, @PathVariable String projecttask_id){
+		ProjectTask projectTask = projectTaskService.updateProjectTaskBySequence(updateTask, backlog_id, projecttask_id);
+		return new ResponseEntity<ProjectTask>(projectTask, HttpStatus.OK);
 	}
 
 }
