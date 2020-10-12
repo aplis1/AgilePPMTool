@@ -11,6 +11,8 @@
 # production
 /build
 
+/actions/books
+
 # misc
 .DS_Store
 .env.local
