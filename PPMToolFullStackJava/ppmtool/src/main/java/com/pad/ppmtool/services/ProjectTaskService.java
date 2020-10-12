@@ -39,7 +39,7 @@ public class ProjectTaskService {
 		projectTask.setProjectSequence(projectIdentifier+"-"+backLogSequence);
 		projectTask.setProjectIdentifier(projectIdentifier);
 		 // INITIAL Priority when priority is null
-		if( projectTask.getPriority() == null) {
+		if( projectTask.getPriority() == 0 || projectTask.getPriority() == null) {
 			projectTask.setPriority(3);
 		}
 		 // INITIAL Status when status is null
@@ -89,7 +89,15 @@ public class ProjectTaskService {
 	public ProjectTask updateProjectTaskBySequence(ProjectTask updateTask,String backlog_id, String projecttask_id ) {
 		ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, projecttask_id);
 		
+		/*if(updateTask.getSummary() == null || updateTask.getSummary() == "") {
+			throw new ProjectNotFoundException("Please include Project Summary");
+		}*/
+		
 		projectTask = updateTask;
+		
+		if(projectTask.getStatus()== "" || projectTask.getStatus()== null) {
+			projectTask.setStatus("TO-DO");
+		}
 		
 		projectTaskRepository.save(projectTask);
 		
